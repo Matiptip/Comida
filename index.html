@@ -781,53 +781,90 @@
         function openQuickView(productId) {
             const product = products.find(p => p.id === productId);
             if (product) {
+                quickViewModal.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
                 quickViewModal.currentProduct = product; // Store product for other functions
-                quickViewImage.src = product.image;
-                quickViewImage.alt = product.title;
-                quickViewTitle.textContent = product.title;
-                quickViewPrice.textContent = `$${product.price.toFixed(2)}`;
-                quickViewDescription.textContent = product.description;
-                addToCartBtn.setAttribute('data-id', product.id); // The main Add to Cart button in modal
 
-                const sizeOptionsContainer = document.getElementById('quick-view-size-options');
-                const colorOptionsContainer = document.getElementById('quick-view-color-options');
-                sizeOptionsContainer.innerHTML = ''; // Clear previous options
-                colorOptionsContainer.innerHTML = ''; // Clear previous options
-
-                // Populate Sizes
-                if (product.availableSizes && product.availableSizes.length > 0) {
-                    product.availableSizes.forEach((size, index) => {
-                        const sizeButton = document.createElement('button');
-                        sizeButton.className = `border border-gray-300 py-2 px-3 text-sm rounded hover:bg-gray-100 quick-view-size-btn ${index === 0 ? 'bg-black text-white' : ''}`;
-                        sizeButton.dataset.size = size;
-                        sizeButton.textContent = size;
-                        sizeOptionsContainer.appendChild(sizeButton);
-                        if (index === 0) quickViewModal.dataset.selectedSize = size; // Set default
-                    });
+                if (quickViewImage) {
+                    quickViewImage.src = product.image;
+                    quickViewImage.alt = product.title;
                 } else {
-                    sizeOptionsContainer.innerHTML = '<p class="text-sm text-gray-500 col-span-4">N/A</p>';
-                    delete quickViewModal.dataset.selectedSize;
+                    console.error("Quick view image element not found");
                 }
 
-                // Populate Colors
-                if (product.availableColors && product.availableColors.length > 0) {
-                    product.availableColors.forEach((color, index) => {
-                        const colorButton = document.createElement('button');
-                        colorButton.className = `w-8 h-8 rounded-full border-2 hover:border-gray-400 focus:outline-none quick-view-color-btn ${color.class} ${index === 0 ? 'ring-2 ring-offset-1 ring-black' : 'border-gray-300'}`;
-                        colorButton.dataset.colorName = color.name;
-                        colorButton.title = color.name;
-                        colorOptionsContainer.appendChild(colorButton);
-                        if (index === 0) quickViewModal.dataset.selectedColor = color.name; // Set default
-                    });
+                if (quickViewTitle) {
+                    quickViewTitle.textContent = product.title;
                 } else {
-                    colorOptionsContainer.innerHTML = '<p class="text-sm text-gray-500">N/A</p>';
-                    delete quickViewModal.dataset.selectedColor;
+                    console.error("Quick view title element not found");
+                }
+
+                if (quickViewPrice) {
+                    quickViewPrice.textContent = `$${product.price.toFixed(2)}`;
+                } else {
+                    console.error("Quick view price element not found");
+                }
+
+                if (quickViewDescription) {
+                    quickViewDescription.textContent = product.description;
+                } else {
+                    console.error("Quick view description element not found");
+                }
+
+                if (addToCartBtn) {
+                    addToCartBtn.setAttribute('data-id', product.id); // The main Add to Cart button in modal
+                } else {
+                    console.error("Quick view add to cart button not found");
+                }
+
+                const sizeOptionsContainer = document.getElementById('quick-view-size-options');
+                if (sizeOptionsContainer) {
+                    sizeOptionsContainer.innerHTML = ''; // Clear previous options
+                    // Populate Sizes
+                    if (product.availableSizes && product.availableSizes.length > 0) {
+                        product.availableSizes.forEach((size, index) => {
+                            const sizeButton = document.createElement('button');
+                            sizeButton.className = `border border-gray-300 py-2 px-3 text-sm rounded hover:bg-gray-100 quick-view-size-btn ${index === 0 ? 'bg-black text-white' : ''}`;
+                            sizeButton.dataset.size = size;
+                            sizeButton.textContent = size;
+                            sizeOptionsContainer.appendChild(sizeButton);
+                            if (index === 0) quickViewModal.dataset.selectedSize = size; // Set default
+                        });
+                    } else {
+                        sizeOptionsContainer.innerHTML = '<p class="text-sm text-gray-500 col-span-4">N/A</p>';
+                        delete quickViewModal.dataset.selectedSize;
+                    }
+                } else {
+                    console.error("Quick view size options container not found");
+                }
+
+                const colorOptionsContainer = document.getElementById('quick-view-color-options');
+                if (colorOptionsContainer) {
+                    colorOptionsContainer.innerHTML = ''; // Clear previous options
+                    // Populate Colors
+                    if (product.availableColors && product.availableColors.length > 0) {
+                        product.availableColors.forEach((color, index) => {
+                            const colorButton = document.createElement('button');
+                            colorButton.className = `w-8 h-8 rounded-full border-2 hover:border-gray-400 focus:outline-none quick-view-color-btn ${color.class} ${index === 0 ? 'ring-2 ring-offset-1 ring-black' : 'border-gray-300'}`;
+                            colorButton.dataset.colorName = color.name;
+                            colorButton.title = color.name;
+                            colorOptionsContainer.appendChild(colorButton);
+                            if (index === 0) quickViewModal.dataset.selectedColor = color.name; // Set default
+                        });
+                    } else {
+                        colorOptionsContainer.innerHTML = '<p class="text-sm text-gray-500">N/A</p>';
+                        delete quickViewModal.dataset.selectedColor;
+                    }
+                } else {
+                    console.error("Quick view color options container not found");
                 }
                 
                 setupQuickViewOptionListeners(product); // Setup listeners for newly created option buttons
-                document.getElementById('quantity-input-quick-view').value = '1'; // Reset quantity
-                quickViewModal.classList.remove('hidden');
-                document.body.classList.add('overflow-hidden');
+                const quantityInput = document.getElementById('quantity-input-quick-view');
+                if (quantityInput) {
+                    quantityInput.value = '1'; // Reset quantity
+                } else {
+                    console.error("Quick view quantity input not found");
+                }
             }
         }
         
