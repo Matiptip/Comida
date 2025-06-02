@@ -724,7 +724,7 @@
             
             products.forEach(product => {
                 const productElement = document.createElement('div');
-                productElement.className = 'group relative';
+                productElement.className = 'group relative product-card';
                 productElement.innerHTML = `
                     <div class="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200 group"> <!-- Added group here for scale -->
                         <a href="product-detail.html?id=${product.id}">
